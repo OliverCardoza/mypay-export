@@ -1,0 +1,5 @@
+{
+     "LoginToken": "{{token}}",
+     "Url": "{{url to environment}}",
+     "NumberOfPays": "10"
+}
