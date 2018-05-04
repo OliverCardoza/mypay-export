@@ -18,11 +18,11 @@ Take note of your URL and add the value to the config.json
 
 ## Mobile
 Navigate to the mobile site
-![Mobile](/path/to/mobile.png)
+![Mobile](/img/mobile.png)
 
 ## Login Token
 Using the developer tools in your browser, look at the cookie for the site. There will be a value for loginToken
-![loginToken](/path/to/loginToken.png)
+![loginToken](/img/loginToken.png)
 Paste the value into the config.json
 ```
 {
