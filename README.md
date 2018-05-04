@@ -16,10 +16,6 @@ Take note of your URL and add the value to the config.json
 }
 ```
 
-## Mobile
-Navigate to the mobile site
-![Mobile](/img/mobile.png)
-
 ## Login Token
 Using the developer tools in your browser, look at the cookie for the site. There will be a value for loginToken
 ![loginToken](/img/loginToken.png)
@@ -40,3 +36,7 @@ Paste the value into the config.json
 
 ## Config
 Number of pays is defaulted to 10. Max number is 100.
+
+Tokens are only good for a few minutes. You must retrieve a new token once you have logged out or the token has expired.
+
+Mobile website must be enabled for this to operate correctly
