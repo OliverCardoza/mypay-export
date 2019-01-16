@@ -8,11 +8,19 @@ type PayData []struct {
 		PlanCode        string  `json:"PlanCode"`
 		PlanDescription string  `json:"PlanDescription"`
 	} `json:"Accruals"`
-	CompanyID      string        `json:"CompanyId"`
-	CompanyName    string        `json:"CompanyName"`
-	Country        string        `json:"Country"`
-	DeductionTaxes []interface{} `json:"DeductionTaxes"`
-	Deductions     []struct {
+	CompanyID      string `json:"CompanyId"`
+	CompanyName    string `json:"CompanyName"`
+	Country        string `json:"Country"`
+	DeductionTaxes []struct {
+		Code              string  `json:"Code"`
+		Description       string  `json:"Description"`
+		EmployeeAmount    float64 `json:"EmployeeAmount"`
+		EmployeeAmountYtd float64 `json:"EmployeeAmountYtd"`
+		EmployerAmount    float64 `json:"EmployerAmount"`
+		EmployerAmountYtd float64 `json:"EmployerAmountYtd"`
+		IsTax             bool    `json:"IsTax"`
+	} `json:"DeductionTaxes"`
+	Deductions []struct {
 		BasisAmount          float64 `json:"BasisAmount"`
 		DeductionCode        string  `json:"DeductionCode"`
 		DeductionDescription string  `json:"DeductionDescription"`
