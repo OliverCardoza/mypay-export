@@ -64,7 +64,7 @@ func GenerateCSV(pays PayData) {
 	defer writer.Flush()
 
 	// Write header fields
-	writer.Write([]string{"", "", "Accruals", "", "Deductions", "", "Earnings", "", "Taxes"})
+	writer.Write([]string{"", "", "Accruals", "", "Deductions", "", "DeductionTaxes", "", "Earnings", "", "Taxes", ""})
 
 	for _, pay := range pays {
 
@@ -72,6 +72,7 @@ func GenerateCSV(pays PayData) {
 
 		maxAccruals := len(pay.Accruals)
 		maxDeducations := len(pay.Deductions)
+		maxDeductionTaxes := len(pay.DeductionTaxes)
 		maxEarnings := len(pay.Earnings)
 		maxTaxes := len(pay.Taxes)
 		max := int(
@@ -93,6 +94,13 @@ func GenerateCSV(pays PayData) {
 			// Deductions
 			if i < maxDeducations {
 				line = append(line, pay.Deductions[i].DeductionDescription, strconv.FormatFloat(pay.Deductions[i].EmployeeAmount, 'f', -1, 64))
+			} else {
+				line = append(line, "", "")
+			}
+
+			// Deductions (Taxes)
+			if i < maxDeductionTaxes {
+				line = append(line, pay.DeductionTaxes[i].Description, strconv.FormatFloat(pay.DeductionTaxes[i].EmployeeAmount, 'f', -1, 64))
 			} else {
 				line = append(line, "", "")
 			}
