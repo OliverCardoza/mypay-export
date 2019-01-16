@@ -73,6 +73,11 @@ func GenerateCSV(pays PayData) {
 				writer.Write([]string{pay.PayDate, pay.PayIdentifier, "EARNING", earning.PayDescription, FormatFloat(earning.Amount)})
 			}
 		}
+		for _, accrual := range pay.Accruals {
+			if accrual.AmountCurrent != 0 {
+				writer.Write([]string{pay.PayDate, pay.PayIdentifier, "ACCRUAL", accrual.PlanDescription, FormatFloat(accrual.AmountCurrent)})
+			}
+		}
 		for _, deduction := range pay.Deductions {
 			if deduction.EmployeeAmount != 0 {
 				writer.Write([]string{pay.PayDate, pay.PayIdentifier, "DEDUCTION", deduction.DeductionDescription, FormatFloat(deduction.EmployeeAmount)})
@@ -80,12 +85,7 @@ func GenerateCSV(pays PayData) {
 		}
 		for _, deduction := range pay.DeductionTaxes {
 			if deduction.EmployeeAmount != 0 {
-				writer.Write([]string{pay.PayDate, pay.PayIdentifier, "DEDUCTION", deduction.Description, FormatFloat(deduction.EmployeeAmount)})
-			}
-		}
-		for _, accrual := range pay.Accruals {
-			if accrual.AmountCurrent != 0 {
-				writer.Write([]string{pay.PayDate, pay.PayIdentifier, "ACCRUAL", accrual.PlanDescription, FormatFloat(accrual.AmountCurrent)})
+				writer.Write([]string{pay.PayDate, pay.PayIdentifier, "DEDUCTION_TAXES", deduction.Description, FormatFloat(deduction.EmployeeAmount)})
 			}
 		}
 		for _, tax := range pay.Taxes {
