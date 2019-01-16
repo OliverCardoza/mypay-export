@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"math"
 	"net/http"
 	"os"
 	"strconv"
@@ -64,64 +63,29 @@ func GenerateCSV(pays PayData) {
 	defer writer.Flush()
 
 	// Write header fields
-	writer.Write([]string{"", "", "Accruals", "", "Deductions", "", "DeductionTaxes", "", "Earnings", "", "Taxes", ""})
+	writer.Write([]string{"Date", "PayId", "PayType", "Name", "Amount"})
 
 	for _, pay := range pays {
+		writer.Write([]string{pay.PayDate, pay.PayIdentifier, "NET", "Net Pay", FormatFloat(pay.NetPayCurrent)})
 
-		writer.Write([]string{pay.PayDate, strconv.FormatFloat(pay.NetPayCurrent, 'f', -1, 64)})
-
-		maxAccruals := len(pay.Accruals)
-		maxDeducations := len(pay.Deductions)
-		maxDeductionTaxes := len(pay.DeductionTaxes)
-		maxEarnings := len(pay.Earnings)
-		maxTaxes := len(pay.Taxes)
-		max := int(
-			math.Max(
-				math.Max(
-					math.Max(float64(maxAccruals), float64(maxDeducations)),
-					float64(maxEarnings)),
-				float64(maxTaxes)))
-
-		line := []string{"", ""}
-		for i := 0; i < max; i++ {
-			// Accruals
-			if i < maxAccruals {
-				line = append(line, pay.Accruals[i].PlanDescription, strconv.FormatFloat(pay.Accruals[i].AmountCurrent, 'f', -1, 64))
-			} else {
-				line = append(line, "", "")
-			}
-
-			// Deductions
-			if i < maxDeducations {
-				line = append(line, pay.Deductions[i].DeductionDescription, strconv.FormatFloat(pay.Deductions[i].EmployeeAmount, 'f', -1, 64))
-			} else {
-				line = append(line, "", "")
-			}
-
-			// Deductions (Taxes)
-			if i < maxDeductionTaxes {
-				line = append(line, pay.DeductionTaxes[i].Description, strconv.FormatFloat(pay.DeductionTaxes[i].EmployeeAmount, 'f', -1, 64))
-			} else {
-				line = append(line, "", "")
-			}
-
-			// Earnings
-			if i < maxEarnings {
-				line = append(line, pay.Earnings[i].PayDescription, strconv.FormatFloat(pay.Earnings[i].Amount, 'f', -1, 64))
-			} else {
-				line = append(line, "", "")
-			}
-
-			// Taxes
-			if i < maxTaxes {
-				line = append(line, pay.Taxes[i].TaxDescription, strconv.FormatFloat(pay.Taxes[i].Amount, 'f', -1, 64))
-			} else {
-				line = append(line, "", "")
-			}
-
-			writer.Write(line)
-			line = []string{"", ""}
+		for _, earning := range pay.Earnings {
+			writer.Write([]string{pay.PayDate, pay.PayIdentifier, "EARNING", earning.PayDescription, FormatFloat(earning.Amount)})
 		}
-
+		for _, deduction := range pay.Deductions {
+			writer.Write([]string{pay.PayDate, pay.PayIdentifier, "DEDUCTION", deduction.DeductionDescription, FormatFloat(deduction.EmployeeAmount)})
+		}
+		for _, deduction := range pay.DeductionTaxes {
+			writer.Write([]string{pay.PayDate, pay.PayIdentifier, "DEDUCTION", deduction.Description, FormatFloat(deduction.EmployeeAmount)})
+		}
+		for _, accrual := range pay.Accruals {
+			writer.Write([]string{pay.PayDate, pay.PayIdentifier, "ACCRUAL", accrual.PlanDescription, FormatFloat(accrual.AmountCurrent)})
+		}
+		for _, tax := range pay.Taxes {
+			writer.Write([]string{pay.PayDate, pay.PayIdentifier, "TAXES", tax.TaxDescription, FormatFloat(tax.Amount)})
+		}
 	}
+}
+
+func FormatFloat(floatAmount float64) string {
+	return strconv.FormatFloat(floatAmount, 'f', -1, 64)
 }
