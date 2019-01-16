@@ -69,19 +69,29 @@ func GenerateCSV(pays PayData) {
 		writer.Write([]string{pay.PayDate, pay.PayIdentifier, "NET", "Net Pay", FormatFloat(pay.NetPayCurrent)})
 
 		for _, earning := range pay.Earnings {
-			writer.Write([]string{pay.PayDate, pay.PayIdentifier, "EARNING", earning.PayDescription, FormatFloat(earning.Amount)})
+			if earning.Amount != 0 {
+				writer.Write([]string{pay.PayDate, pay.PayIdentifier, "EARNING", earning.PayDescription, FormatFloat(earning.Amount)})
+			}
 		}
 		for _, deduction := range pay.Deductions {
-			writer.Write([]string{pay.PayDate, pay.PayIdentifier, "DEDUCTION", deduction.DeductionDescription, FormatFloat(deduction.EmployeeAmount)})
+			if deduction.EmployeeAmount != 0 {
+				writer.Write([]string{pay.PayDate, pay.PayIdentifier, "DEDUCTION", deduction.DeductionDescription, FormatFloat(deduction.EmployeeAmount)})
+			}
 		}
 		for _, deduction := range pay.DeductionTaxes {
-			writer.Write([]string{pay.PayDate, pay.PayIdentifier, "DEDUCTION", deduction.Description, FormatFloat(deduction.EmployeeAmount)})
+			if deduction.EmployeeAmount != 0 {
+				writer.Write([]string{pay.PayDate, pay.PayIdentifier, "DEDUCTION", deduction.Description, FormatFloat(deduction.EmployeeAmount)})
+			}
 		}
 		for _, accrual := range pay.Accruals {
-			writer.Write([]string{pay.PayDate, pay.PayIdentifier, "ACCRUAL", accrual.PlanDescription, FormatFloat(accrual.AmountCurrent)})
+			if accrual.AmountCurrent != 0 {
+				writer.Write([]string{pay.PayDate, pay.PayIdentifier, "ACCRUAL", accrual.PlanDescription, FormatFloat(accrual.AmountCurrent)})
+			}
 		}
 		for _, tax := range pay.Taxes {
-			writer.Write([]string{pay.PayDate, pay.PayIdentifier, "TAXES", tax.TaxDescription, FormatFloat(tax.Amount)})
+			if tax.Amount != 0 {
+				writer.Write([]string{pay.PayDate, pay.PayIdentifier, "TAXES", tax.TaxDescription, FormatFloat(tax.Amount)})
+			}
 		}
 	}
 }
